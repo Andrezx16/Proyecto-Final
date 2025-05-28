@@ -1,0 +1,84 @@
+.bienvenida-container {
+  min-height: 70vh;
+  min-width: 70vh;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 50%;
+  background: linear-gradient(
+    to bottom,
+    var(--primary-color),
+    var(--background-color)
+  );
+  color: var(--secondary-color);
+}
+
+.bienvenida-logo {
+  width: 15vh;
+  height: 15vh;
+  margin-bottom: 1rem;
+}
+
+.bienvenida-title {
+  font-size: 3.5vh;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--secondary-color);
+}
+
+.bienvenida-text {
+  font-size: 2vh;
+  color: var(--black-color);
+  max-width: 28rem;
+  margin-bottom: 1rem;
+}
+
+.bienvenida-subtext-container {
+  margin-bottom: 1.5rem;
+}
+
+.bienvenida-subtext {
+  color: var(--secondary-color);
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.bienvenida-button {
+  width: 15rem;
+  height: 3rem;
+}
+
+.bienvenida-button:hover {
+  background-color: #36aeda; /* puedes definir una var(--primary-hover-color) si deseas más control */
+}
+
+@media only screen and (max-width: 564px) {
+  .bienvenida-container {
+    min-height: 45vh;
+    min-width: 45vh;
+  }
+  .bienvenida-logo {
+    margin-bottom: 0.5rem;
+  }
+  .bienvenida-button {
+    padding: 3px;
+    font-size: 1.5vh;
+    margin-top: 0;
+    width: 15vh;
+    height: 6vh;
+  }
+  .bienvenida-subtext-container {
+    margin-bottom: 1rem;
+  }
+  .bienvenida-subtext {
+    font-size: 1.7vh;
+    margin-bottom: 0;
+  }
+  .bienvenida-text {
+    font-size: 1.6vh;
+    margin-bottom: 0;
+  }
+}

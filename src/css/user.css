@@ -1,0 +1,67 @@
+
+.container {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: auto;
+  height: auto;
+  max-height: 8rem;
+  max-width: 100em;
+  border-radius: 3rem;
+  background: #fff;
+  padding: 1rem;
+  box-shadow: 0 25px 50px 0 rgba(107, 203, 252, 0.2), 0 5px 15px 0 rgba(0, 0, 0, .15);
+  box-sizing: border-box;
+  z-index: 999;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0 1rem;
+}
+
+.name {
+  font-size: 1rem;
+  line-height: 0.8rem;
+}
+
+.email {
+  font-size: 1rem;
+  font-style: oblique;
+}
+
+.usuario {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+.menu-btn {
+  background: none;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+  color: rgb(0, 102, 255);
+  margin-bottom: 25px;
+  padding: 0px;
+  box-shadow: none;   
+  width: 30px;
+
+}
+
+.menu-btn:focus {
+  outline: none;
+}
+
+.menu-options{
+  width: 150px;
+  button{
+    margin: 8px;
+    margin-left: 0;
+    font-size: 0.9em;
+  }
+}
