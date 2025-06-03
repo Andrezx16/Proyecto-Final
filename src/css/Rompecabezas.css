@@ -1,0 +1,73 @@
+.rompecabezas-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  background-color: #fffbe6;
+}
+
+.timer {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.rompecabezas-grid {
+  display: grid;
+  width: 80vmin;
+  height: 80vmin;
+  max-width: 600px;
+  max-height: 600px;
+  gap: 4px;
+  transition: all 0.3s ease;
+}
+
+.pieza {
+  background-color: #ddd;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.pieza:hover {
+  transform: scale(1.05);
+}
+
+.pieza.seleccionada {
+  outline: 3px solid #00bfff;
+}
+
+.mensaje-ganar {
+  position: absolute;
+  top: 20px;
+  background: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 20px;
+}
+
+.btn-retroceder {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: #00bfff;
+  color: white;
+  font-size: 24px;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 1000;
+  transition: transform 0.2s ease;
+}
+
+.btn-retroceder:hover {
+  transform: scale(1.1);
+}

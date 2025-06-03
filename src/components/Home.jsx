@@ -2,14 +2,18 @@ import React, { useEffect, useState } from "react";
 import useUsuario from "../hooks/useUsuario";
 import CardUser from "./CardUser";
 import Quiz from "./Quiz";
-import { hasCompletedQuiz } from "../Firebase/database"; // 👈 importa esto
-import "../css/login.css";
+import { onSignOut } from "../Firebase/auth";
+import General from "./General";
 import Bienvenida from "./Bienvenida";
+import { hasCompletedQuiz, getQuizAnswers } from "../Firebase/database";
+import "../css/login.css";
 
 const Home = () => {
   const usuario = useUsuario();
   const [showQuiz, setShowQuiz] = useState(false);
   const [showBienvenida, setShowBienvenida] = useState(false);
+  const [showGeneral, setShowGeneral] = useState(false);
+  const [quizAnswers, setQuizAnswers] = useState(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -18,8 +22,12 @@ const Home = () => {
         const yaRespondio = await hasCompletedQuiz(usuario.email);
 
         if (!yaRespondio) {
+          // Si no ha respondido el quiz, mostrarlo
           setShowQuiz(true);
         } else {
+          // Si ya respondió, obtener las respuestas guardadas y mostrar bienvenida
+          const respuestas = await getQuizAnswers(usuario.email);
+          setQuizAnswers(respuestas);
           setShowBienvenida(true);
         }
 
@@ -30,30 +38,51 @@ const Home = () => {
     verificarQuiz();
   }, [usuario]);
 
+  // Cuando termina el quiz
+  const handleQuizFinish = (answers) => {
+    setQuizAnswers(answers);
+    setShowQuiz(false);
+    setShowBienvenida(true);
+  };
+
+  // Cuando hace clic en "Empezar Retos" en Bienvenida
+  const handleBienvenidaStart = () => {
+    setShowBienvenida(false);
+    setShowGeneral(true);
+  };
+
+  // Cuando hace clic en "Volver" en Retos
+  const handleRetosBack = () => {
+    setShowGeneral(false);
+    setShowBienvenida(true);
+  };
+
+  // Loading state
   if (!ready) return null;
 
   return (
     <div className="login">
-      <nav className="carduser">
-        <CardUser />
-      </nav>
+      <CardUser />
+      <button
+        className="cerrar-sesion-flotante"
+        title="Cerrar sesión"
+        onClick={onSignOut}
+      >
+        ❌
+      </button>
+
       <div className="decoration"></div>
       <div className="decorationl"></div>
-      {showQuiz && (
-        <Quiz
-          onFinish={() => {
-            setShowQuiz(false);
-            setShowBienvenida(true);
-          }}
-        />
-      )}
 
-      {showBienvenida && (
-        <Bienvenida
-          onStart={() => {
-            setShowBienvenida(false);
-          }}
-        />
+      {/* Mostrar Quiz si no ha respondido */}
+      {showQuiz && <Quiz onFinish={handleQuizFinish} />}
+
+      {/* Mostrar Bienvenida después del quiz o si ya respondió antes */}
+      {showBienvenida && <Bienvenida onStart={handleBienvenidaStart} />}
+
+      {/* Mostrar Retos cuando hace clic en "Empezar Retos" */}
+      {showGeneral && quizAnswers && (
+        <General quizAnswers={quizAnswers} onBack={handleRetosBack} />
       )}
       <img className="bubbles" src="/img/bubbles.png" alt="burbujas" />
     </div>

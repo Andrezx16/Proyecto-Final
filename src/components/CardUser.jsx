@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { onSignOut } from "../Firebase/auth";
-import { deleteQuizAnswers } from "../Firebase/database";
 import useUsuario from "../hooks/useUsuario";
 import user from "../icons/user.png";
 import "../css/user.css";
@@ -9,15 +8,6 @@ const CardUser = () => {
   const usuario = useUsuario();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef();
-
-  const reiniciarQuiz = async () => {
-    try {
-      await deleteQuizAnswers(usuario.email);
-      window.location.reload();
-    } catch (error) {
-      console.error("Error al reiniciar el quiz:", error);
-    }
-  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -33,27 +23,36 @@ const CardUser = () => {
     };
   }, [menuOpen]);
 
+  const cerrarSesion = async () => {
+    try {
+      await onSignOut();
+      window.location.href = "/login"; // ✅ Redirección directa
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
+
   return (
     <div className="container" ref={menuRef}>
-      {usuario?.avatar ? (
-        <img className="usuario" src={usuario?.avatar} alt={usuario?.email} />
-      ) : (
-        <img className="usuario" src={user} width={80} />
-      )}
+      <img
+        className="usuario"
+        src={usuario?.avatar || user}
+        alt={usuario?.email || "Usuario"}
+      />
+
       <div className="info">
-        {!menuOpen && (
+        {!menuOpen ? (
           <>
             <span className="name">{usuario?.username || "Sin Nombre"}</span>
             <span className="email">{usuario?.email || "usuario"}</span>
           </>
-        )}
-        {menuOpen && (
+        ) : (
           <div className="menu-options">
-            <button onClick={reiniciarQuiz}>🔄 Rehacer Quiz</button>
-            <button onClick={onSignOut}>❌ Cerrar Sesión</button>
+            <button onClick={cerrarSesion}>❌ Cerrar Sesión</button>
           </div>
         )}
       </div>
+
       <button className="menu-btn" onClick={() => setMenuOpen(!menuOpen)}>
         ⋮
       </button>

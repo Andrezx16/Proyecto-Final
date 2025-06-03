@@ -1,0 +1,99 @@
+.juegos-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.25rem;
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.juegos-title {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #0077cc;
+  margin-top: 5.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.juegos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-x: auto;
+  gap: 1.5rem;
+  padding: 1rem;
+  scroll-snap-type: x mandatory;
+}
+
+.juego-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 280px; /* Slightly wider than image */
+  height: 320px; /* Height to accommodate image + title */
+  cursor: pointer;
+  border: 2px solid #0077cc;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  box-sizing: border-box;
+  transition: transform 0.3s ease;
+  background-color: white;
+}
+
+.juego-card:hover {
+  transform: scale(1.05);
+}
+
+.juego-card img {
+  max-width: 250px;
+  height: 250px;
+  object-fit: contain;
+  user-select: none;
+}
+
+.juego-card h3 {
+  margin-top: 10px;
+  font-size: 1.2rem;
+  color: #0077cc;
+  text-align: center;
+  user-select: none;
+}
+
+.juegos-contenido {
+  padding: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra todo el contenido horizontalmente */
+}
+
+.volver-btn {
+  background-color: #0077cc;
+  color: white;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 10px;
+  margin-bottom: 1rem; /* Añadido margen inferior */
+  font-size: 1rem;
+  cursor: pointer;
+  width: 300px;
+  transition: background-color 0.3s ease;
+  /* Opción adicional si quieres centrarlo independientemente: */
+  /* margin: 0 auto 1rem auto; */
+}
+
+.volver-btn:hover {
+  background-color: #005fa3;
+}
+
+.seccion-juegos {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra el contenido de la sección */
+  width: 100%; /* Asegura que ocupe todo el ancho disponible */
+}

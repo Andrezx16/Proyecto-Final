@@ -1,7 +1,26 @@
 import React from "react";
-import "../css/bienvenida.css"; // Importa el CSS
+import { deleteQuizAnswers } from "../Firebase/database";
+import useUsuario from "../hooks/useUsuario";
+import "../css/bienvenida.css";
 
 const Bienvenida = ({ onStart }) => {
+  const usuario = useUsuario();
+  const reiniciarQuiz = async () => {
+    try {
+      await deleteQuizAnswers(usuario.email);
+      window.location.reload();
+    } catch (error) {
+      console.error("Error al reiniciar el quiz:", error);
+    }
+  };
+  const handleStartClick = () => {
+    console.log("Botón Empezar Retos clickeado"); 
+    if (onStart) {
+      onStart();
+    }
+  };
+
+
   return (
     <div className="bienvenida-container">
       <img 
@@ -18,8 +37,16 @@ const Bienvenida = ({ onStart }) => {
       </div>
       <button 
         className="bienvenida-button"
+        onClick={handleStartClick}
       >
         Empezar Retos
+      </button>
+      <button 
+        className="bienvenida-button" 
+        onClick={reiniciarQuiz}
+        title="Rehacer Quiz"
+      >
+        Rehacer quiz
       </button>
     </div>
   );

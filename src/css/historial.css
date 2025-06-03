@@ -1,0 +1,386 @@
+.historial-container {
+  max-width: 800px;
+  height: 100vh;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.historial-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.historial-header .btn-back {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.historial-header .btn-back:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.historial-header h1 {
+  margin: 0;
+  color: #333;
+  font-size: 2rem;
+  flex-grow: 1;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+/* Estadísticas */
+.estadisticas-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 20px;
+  margin-bottom: 30px;
+  max-height: 500px;
+  min-width: 600px;
+}
+
+.estadisticas-section h2 {
+  margin: 0 0 20px 0;
+  font-size: 1.5rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  max-height: 150px;
+}
+
+.stat-card h3 {
+  font-size: 2rem;
+  margin: 0 0 10px 0;
+  font-weight: bold;
+}
+
+.stat-card p {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 0.9rem;
+}
+
+.categorias-populares h4 {
+  margin: 0 0 15px 0;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.categoria-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.categoria-tag {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Controles */
+.controles {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 5px;
+  flex-wrap: wrap;
+}
+
+.filtros, .ordenamiento {
+  flex: 1;
+  min-width: 200px;
+}
+
+.controles label {
+  display: block;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.controles select {
+  width: 100%;
+  padding: 10px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background: white;
+  transition: border-color 0.3s ease;
+}
+
+.controles select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+/* Sin retos */
+.sin-retos {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* Lista de retos con scroll nativo - NUEVO Y MEJORADO */
+.retos-historial h3 {
+  color: #333;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 1.3rem;
+}
+
+.retos-lista-container {
+  position: relative;
+  max-height: 200px; /* Altura máxima del contenedor */
+  overflow-y: auto; /* Scroll vertical nativo */
+  overflow-x: hidden;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  background: #f8f9fa;
+  padding: 15px;
+  /* Scroll personalizado para navegadores webkit */
+  scrollbar-width: thin;
+  scrollbar-color: #667eea #f8f9fa;
+}
+
+/* Personalizar scrollbar para Chrome/Safari */
+.retos-lista-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.retos-lista-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.retos-lista-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+}
+
+.retos-lista-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+}
+
+.retos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.reto-historial-card {
+  background: white;
+  border-radius: 15px;
+  padding: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  border: 1px solid #e0e0e0;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  /* Removidas las restricciones de altura para mostrar contenido completo */
+}
+
+.reto-historial-card:hover {
+  transform: translateX(5px);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+  border-color: #667eea;
+}
+
+.reto-info-hi {
+  flex: 1;
+}
+
+.reto-titulo-fecha {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  gap: 15px;
+}
+
+.reto-titulo-fecha h4 {
+  margin: 0;
+  color: #333;
+  font-size: 1.1rem;
+  flex: 1;
+  line-height: 1.3;
+}
+
+.fecha-completado {
+  background: #f0f0f0;
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  color: #666;
+  white-space: nowrap;
+}
+
+.reto-descripcion-hi {
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-bottom: 15px;
+  /* Removido el truncado para mostrar descripción completa */
+}
+
+.reto-meta {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.reto-meta .categoria {
+  background: #f0f0f0;
+  color: #666;
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.reto-meta .dificultad {
+  color: white;
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.completado-badge {
+  background: linear-gradient(45deg, #4CAF50, #8BC34A);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Efecto de fade-in para animaciones */
+@keyframes historialFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.reto-historial-card {
+  animation: historialFadeIn 0.5s ease forwards;
+}
+
+/* Responsive - MEJORADO para scroll nativo */
+@media (max-width: 768px) {
+  .historial-container {
+    padding: 15px;
+  }
+  
+  .historial-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .historial-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  }
+  
+  .stat-card {
+  max-height: 40px;
+  padding: 0px;
+  margin-bottom: 40px; 
+  h3 {
+    font-size: 1.5rem;
+  }
+}
+  
+  .controles {
+    margin-top: 0px;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .estadisticas-section{
+    min-width: 350px;
+    max-height: 350px;
+    margin-bottom: 5px;
+  }
+
+  .sin-destacadas{
+    margin-top: 0px;
+  }
+
+  .retos-lista-container {
+    
+    max-width: 350px;
+    max-height: 185px; /* Altura ajustada para móvil */
+    padding: 5px;
+    margin-bottom: 10px; 
+    
+  }
+  
+  .reto-titulo-fecha {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0px;
+    margin-bottom: 0px;
+  }
+  
+  .reto-descripcion-hi{
+    margin: 0px;
+  }
+
+  .fecha-completado {
+    align-self: flex-start;
+  }
+  
+  .reto-historial-card {
+    max-height: 200px;
+    padding: 10px;
+  }
+
+  .reto-info-hi{
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 250px;
+    padding: 0px;
+  }
+  
+  /* Scrollbar más pequeño en móvil */
+  .retos-lista-container::-webkit-scrollbar {
+    width: 6px;
+  }
+}

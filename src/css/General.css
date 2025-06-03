@@ -1,0 +1,105 @@
+/* General layout full height and width */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Contenedor principal */
+.general-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(to bottom right, #dff0ff, #b8e0ff);
+  color: #003366;
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+}
+
+/* Barra lateral vertical u horizontal */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  background-color: #e6f4ff;
+  padding: 1rem;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+  z-index: 100; /* Asegura que esté por encima del contenido */
+}
+
+/* Íconos de navegación */
+.icon {
+  background: linear-gradient(to bottom, #5bbcff, #2a90f9);
+  border-radius: 50%;
+  padding: 15px;
+  color: white;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(91, 188, 255, 0.4);
+  position: relative; /* Asegura que el z-index funcione */
+  z-index: 101; /* Mayor z-index para los íconos */
+}
+
+.icon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(91, 188, 255, 0.6);
+}
+
+/* Contenido principal ocupa el resto */
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive: barra abajo */
+@media (max-width: 768px) {
+  .general-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-right: none;
+    border-top: 2px solid #a0cfff;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    padding: 0.8rem; /* Aumentado el padding */
+    min-height: 80px; /* Altura mínima para evitar superposición */
+    position: relative; /* Posicionamiento relativo */
+    z-index: 100; /* Z-index alto */
+  }
+
+  .icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+    padding: 10px;
+    z-index: 101; /* Z-index aún mayor para los íconos */
+  }
+
+  .main-content {
+    padding: 1rem; /* Reducido el padding en móviles */
+    overflow-y: auto;
+    flex: 1;
+    height: calc(100vh - 80px); /* Resta la altura de la sidebar */
+  }
+}

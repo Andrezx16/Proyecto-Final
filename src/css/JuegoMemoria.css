@@ -1,0 +1,67 @@
+.juego-memoria {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;/* Ocupa toda la altura de la ventana */
+}
+
+.timer {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.grid-memoria {
+  display: grid;
+  gap: 10px; /* Espacio entre las cartas */
+  width: 80vw; /* Ancho de la cuadrícula */
+  max-width: 600px; /* Ancho máximo */
+  height: auto; /* Altura automática */
+}
+
+.carta {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  aspect-ratio: 1; /* Mantiene la proporción cuadrada */
+}
+
+.carta img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Asegura que la imagen cubra el cuadro */
+}
+
+.reverso {
+  width: 100%;
+  height: 100%;
+  background-color: #ccc; /* Color del reverso de la carta */
+}
+
+.btn-retroceder {
+  position: fixed;
+  bottom: 20px;
+  right: 20px; /* ⬅ Cambiar de left a right */
+  background-color: #00bfff;
+  color: white;
+  font-size: 24px;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 1000;
+  transition: transform 0.2s ease;
+}
+
+.btn-retroceder:hover {
+  transform: scale(1.1);
+}

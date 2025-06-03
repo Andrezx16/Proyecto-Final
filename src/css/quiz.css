@@ -1,38 +1,136 @@
-.btn-group{
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
-    flex-wrap: wrap;
+.btn-group {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+  max-width: 90vw;
 }
 
-.btn{
-    position: relative;
-    align-items: center;
-    border-radius: 25px;
-    width: 300px;
-    max-width: 500px;
-    height: auto;
-    max-height: 150px;
-    margin-right: 15px;
-    display: flex;
-    flex-direction: column;
-
-    
-}
-.btn-img{
-    margin: 0;
-    width: auto;
-    max-width: 300px;
-    height: auto;
-    max-height: 80px;
-
+.btn {
+  position: relative;
+  align-items: center;
+  border-radius: 25px;
+  width: 300px;
+  max-width: 500px;
+  height: auto;
+  max-height: 150px;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  animation: aparecerBoton 0.5s ease-out forwards;
+  opacity: 0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.Quiz-menu{
-    h1{
-        text-align: center;
-    }
-    h2{
-        text-align: center;
-    }
+.btn-img {
+  margin: 0;
+  width: auto;
+  max-width: 300px;
+  height: auto;
+  max-height: 80px;
+}
+
+.btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 18px rgba(0, 51, 170, 0.3);
+}
+
+/* Animación de rebote + glow cuando el botón está seleccionado */
+@keyframes bounceGlow {
+  0% {
+    transform: translateY(0);
+    box-shadow: 0 0 0 rgba(0, 123, 255, 0);
+  }
+  30% {
+    transform: translateY(-8px);
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.6);
+  }
+  60% {
+    transform: translateY(2px);
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+  }
+  100% {
+    transform: translateY(0);
+    box-shadow: 0 0 0 rgba(0, 123, 255, 0);
+  }
+}
+
+.btn.selected {
+  animation: bounceGlow 0.5s ease;
+}
+
+/* Animación de aparición de botones */
+@keyframes aparecerBoton {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.Quiz-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centrado vertical */
+  align-items: center;     /* Centrado horizontal */
+  height: 100vh;
+  width: 100vw;
+  text-align: center;
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow: hidden; /* Asegura que no haya scroll indeseado */
+}
+
+.Quiz-menu h1,
+.Quiz-menu h2 {
+  margin-bottom: 1rem;
+  max-width: 90%;
+}
+/* Flechas de navegación */
+.flecha-izquierda,
+.flecha-derecha {
+  position: fixed;
+  bottom: 15px;
+  font-size: 2.5rem;
+  color: #007bff;
+  z-index: 999;
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 0.3rem 0.6rem;
+  border-radius: 50%;
+  cursor: default;
+  user-select: none;
+}
+
+.flecha-izquierda {
+  left: 10px;
+}
+
+.flecha-derecha {
+  right: 10px;
+}
+
+/* Animación de título */
+@keyframes aparecerBorroso {
+  0% {
+    opacity: 0;
+    filter: blur(8px);
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+  }
+}
+
+.titulo-animado {
+  animation: aparecerBorroso 1.2s ease-out forwards;
+  opacity: 0;
+  filter: blur(8px);
+  text-align: center;
 }
