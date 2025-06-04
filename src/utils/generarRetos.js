@@ -144,7 +144,7 @@ export const generarReto = (answers) => {
         },
         "15 minutos": {
           titulo: "Llama a alguien querido",
-          descripcion: "Llama a un familiar o amigo y cuéntale cómo te sientes honestly.",
+          descripcion: "Llama a un familiar o amigo y cuéntale cómo te sientes.",
           categoria: "Comunicación Emocional",
           dificultad: "medio"
         },

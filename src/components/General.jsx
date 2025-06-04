@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Retos from "./Retos"; 
-import { FaHome, FaGamepad, FaHistory } from "react-icons/fa";
+import Logros from "./Logros";
+import { FaHome, FaGamepad, FaHistory, FaTrophy } from "react-icons/fa";
 import "../css/General.css";
 import Juegos from "./Juegos";
-import Historial from "./Historial"
+import Historial from "./Historial";
 
 const General = ({ quizAnswers, onBack }) => {
   const [selected, setSelected] = useState("retos");
@@ -15,7 +16,9 @@ const General = ({ quizAnswers, onBack }) => {
       case "game":
         return <Juegos />;
       case "history":
-        return <Historial/>;
+        return <Historial />;
+      case "logros":
+        return <Logros />;
       default:
         return null;
     }
@@ -24,14 +27,33 @@ const General = ({ quizAnswers, onBack }) => {
   return (
     <div className="general-container">
       <div className="sidebar">
-        <div className="icon" onClick={() => setSelected("retos")}>
+        <div 
+          className={`icon ${selected === "retos" ? "active" : ""}`}
+          onClick={() => setSelected("retos")}
+          title="Retos"
+        >
           <FaHome />
         </div>
-        <div className="icon" onClick={() => setSelected("game")}>
+        <div 
+          className={`icon ${selected === "game" ? "active" : ""}`}
+          onClick={() => setSelected("game")}
+          title="Juegos"
+        >
           <FaGamepad />
         </div>
-        <div className="icon" onClick={() => setSelected("history")}>
+        <div 
+          className={`icon ${selected === "history" ? "active" : ""}`}
+          onClick={() => setSelected("history")}
+          title="Historial"
+        >
           <FaHistory />
+        </div>
+        <div 
+          className={`icon ${selected === "logros" ? "active" : ""}`}
+          onClick={() => setSelected("logros")}
+          title="Logros y Recompensas"
+        >
+          <FaTrophy />
         </div>
       </div>
       <div className="main-content">{renderContent()}</div>

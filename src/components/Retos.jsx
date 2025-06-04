@@ -299,13 +299,7 @@ const Retos = ({ quizAnswers, onBack}) => {
                 </div>
               </div>
             </div>
-            
-            {/* Indicador opcional */}
-            {retosRelacionados.length > 3 && (
-              <div className="scroll-indicator">
-                Desliza para ver más retos →
-              </div>
-            )}
+          
           </div>
         )}
       </div>
