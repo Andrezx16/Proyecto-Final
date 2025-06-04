@@ -2,17 +2,19 @@ import React, { useState, useEffect, useRef } from "react";
 import { generarReto, obtenerRetosRelacionados } from "../utils/generarRetos";
 import useUsuario from "../hooks/useUsuario";
 import { saveCompletedChallenge, getCompletedChallenges } from "../Firebase/database";
+import { useLogros } from "../contexts/LogrosContext";
 import "../css/retos.css";
 
-const Retos = ({ quizAnswers, onBack}) => {
+const Retos = ({ quizAnswers, onBack }) => {
   const [retoActual, setRetoActual] = useState(null);
   const [retosRelacionados, setRetosRelacionados] = useState([]);
   const [retosCompletados, setRetosCompletados] = useState(new Set());
   const [loading, setLoading] = useState(false);
   const [loadingRetos, setLoadingRetos] = useState(true);
+  const [todosLosRetos, setTodosLosRetos] = useState([]);
   const usuario = useUsuario();
+  const { verificarNuevosLogros, calcularLogrosDesbloqueados } = useLogros();
     
-  
   // Referencias para el carrusel
   const carouselRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -26,6 +28,7 @@ const Retos = ({ quizAnswers, onBack}) => {
       const retosFromDB = await getCompletedChallenges(usuario.email);
       const idsCompletados = retosFromDB.map(reto => generarIdReto(reto));
       setRetosCompletados(new Set(idsCompletados));
+      setTodosLosRetos(retosFromDB);
       
     } catch (error) {
       console.error("Error obteniendo retos completados:", error);
@@ -35,17 +38,17 @@ const Retos = ({ quizAnswers, onBack}) => {
   };
 
   useEffect(() => {
-    console.log("Retos - quizAnswers recibidas:", quizAnswers); // Debug
+    console.log("Retos - quizAnswers recibidas:", quizAnswers);
     
     if (quizAnswers) {
       try {
         const reto = generarReto(quizAnswers);
-        console.log("Reto generado:", reto); // Debug
+        console.log("Reto generado:", reto);
         setRetoActual(reto);
         
         // Obtener retos relacionados
         const relacionados = obtenerRetosRelacionados(reto);
-        console.log("Retos relacionados:", relacionados); // Debug
+        console.log("Retos relacionados:", relacionados);
         setRetosRelacionados(relacionados);
       } catch (error) {
         console.error("Error generando reto:", error);
@@ -80,7 +83,7 @@ const Retos = ({ quizAnswers, onBack}) => {
   // Función para scroll suave hacia la izquierda
   const scrollLeft = () => {
     if (carouselRef.current) {
-      const scrollAmount = 320; // Ancho de una card + gap
+      const scrollAmount = 320;
       carouselRef.current.scrollBy({
         left: -scrollAmount,
         behavior: 'smooth'
@@ -91,7 +94,7 @@ const Retos = ({ quizAnswers, onBack}) => {
   // Función para scroll suave hacia la derecha
   const scrollRight = () => {
     if (carouselRef.current) {
-      const scrollAmount = 320; // Ancho de una card + gap
+      const scrollAmount = 320;
       carouselRef.current.scrollBy({
         left: scrollAmount,
         behavior: 'smooth'
@@ -102,7 +105,6 @@ const Retos = ({ quizAnswers, onBack}) => {
   // Effect para actualizar botones cuando cambian los retos relacionados
   useEffect(() => {
     if (retosRelacionados.length > 0) {
-      // Pequeño delay para que el DOM se actualice
       setTimeout(updateScrollButtons, 100);
     }
   }, [retosRelacionados]);
@@ -112,16 +114,32 @@ const Retos = ({ quizAnswers, onBack}) => {
 
     setLoading(true);
     try {
+      // Guardar el reto completado
       await saveCompletedChallenge(usuario.email, {
         ...retoActual,
         completadoEn: new Date().toISOString(),
         usuario: usuario.username || "Anónimo",
-        userEmail: usuario.email // Asegúrate de incluir el email para las consultas
+        userEmail: usuario.email
       });
       
-      // Actualizar el estado local inmediatamente
+      // Obtener logros anteriores
+      const logrosAnteriores = calcularLogrosDesbloqueados(todosLosRetos);
+      
+      // Actualizar el estado local
       const idReto = generarIdReto(retoActual);
       setRetosCompletados(prev => new Set([...prev, idReto]));
+      
+      // Actualizar lista de todos los retos
+      const nuevosRetos = [...todosLosRetos, {
+        ...retoActual,
+        completadoEn: new Date().toISOString(),
+        usuario: usuario.username || "Anónimo",
+        userEmail: usuario.email
+      }];
+      setTodosLosRetos(nuevosRetos);
+      
+      // Verificar nuevos logros y mostrar notificaciones
+      verificarNuevosLogros(nuevosRetos, logrosAnteriores);
       
       console.log("Reto completado y guardado");
     } catch (error) {
@@ -140,7 +158,7 @@ const Retos = ({ quizAnswers, onBack}) => {
   };
 
   const handleBackClick = () => {
-    console.log("Botón Volver clickeado"); // Debug
+    console.log("Botón Volver clickeado");
     if (onBack) {
       onBack();
     }
@@ -186,7 +204,6 @@ const Retos = ({ quizAnswers, onBack}) => {
 
   return (
     <div>
-
       <div className="retos-container">
         <div className="retos-header">
           <button onClick={handleBackClick} className="btn-back">
@@ -197,9 +214,7 @@ const Retos = ({ quizAnswers, onBack}) => {
         </div>
 
         <div className="reto-principal">
-          
           <div className="reto-card">
-            
             <div className="reto-header">
               <h2>{retoActual.titulo}</h2>
               
@@ -242,7 +257,6 @@ const Retos = ({ quizAnswers, onBack}) => {
           <div className="retos-relacionados">
             <h3>Otros retos que te pueden interesar</h3>
             <div className="retos-carousel-container">
-              {/* Botón scroll izquierda */}
               <button 
                 className="carousel-nav-btn prev"
                 onClick={scrollLeft}
@@ -252,7 +266,6 @@ const Retos = ({ quizAnswers, onBack}) => {
                 ‹
               </button>
 
-              {/* Botón scroll derecha */}
               <button 
                 className="carousel-nav-btn next"
                 onClick={scrollRight}
@@ -262,7 +275,6 @@ const Retos = ({ quizAnswers, onBack}) => {
                 ›
               </button>
 
-              {/* Carrusel de retos */}
               <div 
                 className="retos-carousel-wrapper"
                 ref={carouselRef}
@@ -299,11 +311,10 @@ const Retos = ({ quizAnswers, onBack}) => {
                 </div>
               </div>
             </div>
-          
           </div>
         )}
       </div>
-  </div>
+    </div>
   );
 };
 

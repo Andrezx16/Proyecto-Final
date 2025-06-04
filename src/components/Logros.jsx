@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import useUsuario from "../hooks/useUsuario";
 import { getCompletedChallenges } from "../Firebase/database";
+import { useLogros } from "../contexts/LogrosContext";
 import "../css/logros.css";
 
 const Logros = () => {
@@ -8,79 +9,7 @@ const Logros = () => {
   const [loading, setLoading] = useState(true);
   const [logrosDesbloqueados, setLogrosDesbloqueados] = useState(new Set());
   const usuario = useUsuario();
-
-  // Definición de logros disponibles
-  const logrosDisponibles = [
-    {
-      id: 'primer_reto',
-      titulo: 'Primer Paso',
-      descripcion: 'Completa tu primer reto',
-      icono: '🎯',
-      condicion: (retos) => retos.length >= 1,
-      puntos: 10,
-      categoria: 'iniciacion'
-    },
-    {
-      id: 'cinco_retos',
-      titulo: 'Constante',
-      descripcion: 'Completa 5 retos',
-      icono: '🔥',
-      condicion: (retos) => retos.length >= 5,
-      puntos: 25,
-      categoria: 'consistencia'
-    },
-    {
-      id: 'diez_retos',
-      titulo: 'Dedicado',
-      descripcion: 'Completa 10 retos',
-      icono: '⭐',
-      condicion: (retos) => retos.length >= 10,
-      puntos: 50,
-      categoria: 'consistencia'
-    },
-    {
-      id: 'reto_dificil',
-      titulo: 'Desafío Extremo',
-      descripcion: 'Completa un reto difícil',
-      icono: '💪',
-      condicion: (retos) => retos.some(reto => reto.dificultad === 'difícil'),
-      puntos: 30,
-      categoria: 'dificultad'
-    },
-    {
-      id: 'explorador',
-      titulo: 'Explorador',
-      descripcion: 'Completa retos de 3 categorías diferentes',
-      icono: '🗺️',
-      condicion: (retos) => {
-        const categorias = new Set(retos.map(reto => reto.categoria));
-        return categorias.size >= 3;
-      },
-      puntos: 35,
-      categoria: 'variedad'
-    },
-    {
-      id: 'racha_semanal',
-      titulo: 'Racha Semanal',
-      descripcion: 'Completa retos durante 7 días seguidos',
-      icono: '📅',
-      condicion: (retos) => {
-        // Lógica simplificada - en producción sería más compleja
-        return retos.length >= 7;
-      },
-      puntos: 40,
-      categoria: 'constancia'
-    },
-    {
-      id: 'maestro',
-      titulo: 'Maestro de Retos',
-      descripcion: 'Completa 20 retos',
-      icono: '👑',
-      condicion: (retos) => retos.length >= 20,
-      puntos: 100,
-      categoria: 'maestria'
-    }
-  ];
+  const { logrosDisponibles, calcularLogrosDesbloqueados } = useLogros();
 
   // Cargar retos completados
   useEffect(() => {
@@ -91,14 +20,9 @@ const Logros = () => {
         const retos = await getCompletedChallenges(usuario.email);
         setRetosCompletados(retos);
         
-        // Verificar logros desbloqueados
-        const nuevosLogros = new Set();
-        logrosDisponibles.forEach(logro => {
-          if (logro.condicion(retos)) {
-            nuevosLogros.add(logro.id);
-          }
-        });
-        setLogrosDesbloqueados(nuevosLogros);
+        // Usar la función del context para calcular logros desbloqueados
+        const logrosCalculados = calcularLogrosDesbloqueados(retos);
+        setLogrosDesbloqueados(logrosCalculados);
         
       } catch (error) {
         console.error("Error cargando retos:", error);
@@ -108,7 +32,7 @@ const Logros = () => {
     };
 
     cargarRetos();
-  }, [usuario?.email]);
+  }, [usuario?.email, calcularLogrosDesbloqueados]);
 
   // Calcular estadísticas
   const calcularEstadisticas = () => {
@@ -129,7 +53,7 @@ const Logros = () => {
       totalPuntos,
       categorias: categorias.size,
       retosPorDificultad,
-      progreso: Math.min((totalRetos / 20) * 100, 100) // Progreso hacia maestría
+      progreso: Math.min((totalRetos / 20) * 100, 100)
     };
   };
 
@@ -202,42 +126,42 @@ const Logros = () => {
 
       {/* Logros */}
       <div className="logros-section">
-          <h3>🎖️ Logros Disponibles</h3>
-          <div className="logros-grid">
-            {logrosDisponibles.map(logro => {
-              const desbloqueado = logrosDesbloqueados.has(logro.id);
-              return (
-                <div 
-                  key={logro.id} 
-                  className={`logro-card ${desbloqueado ? 'desbloqueado' : 'bloqueado'}`}
-                >
-                  <div className="logro-icono">
-                    {desbloqueado ? logro.icono : '🔒'}
-                  </div>
-                  <div className="logro-info">
-                    <h4 className={`logro-titulo ${!desbloqueado ? 'bloqueado-text' : ''}`}>
-                      {desbloqueado ? logro.titulo : '???'}
-                    </h4>
-                    <p className={`logro-descripcion ${!desbloqueado ? 'bloqueado-text' : ''}`}>
-                      {desbloqueado ? logro.descripcion : 'Logro por desbloquear'}
-                    </p>
-                    <div className="logro-puntos">
-                      <span className="puntos">+{logro.puntos} pts</span>
-                      <span className={`categoria-badge ${logro.categoria}`}>
-                        {logro.categoria}
-                      </span>
-                    </div>
-                  </div>
-                  {desbloqueado && (
-                    <div className="logro-completado">
-                      <span className="check-mark">✓</span>
-                    </div>
-                  )}
+        <h3>🎖️ Logros Disponibles</h3>
+        <div className="logros-grid">
+          {logrosDisponibles.map(logro => {
+            const desbloqueado = logrosDesbloqueados.has(logro.id);
+            return (
+              <div 
+                key={logro.id} 
+                className={`logro-card ${desbloqueado ? 'desbloqueado' : 'bloqueado'}`}
+              >
+                <div className="logro-icono">
+                  {desbloqueado ? logro.icono : '🔒'}
                 </div>
-              );
-            })}
-          </div>
+                <div className="logro-info">
+                  <h4 className={`logro-titulo ${!desbloqueado ? 'bloqueado-text' : ''}`}>
+                    {desbloqueado ? logro.titulo : '???'}
+                  </h4>
+                  <p className={`logro-descripcion ${!desbloqueado ? 'bloqueado-text' : ''}`}>
+                    {desbloqueado ? logro.descripcion : 'Logro por desbloquear'}
+                  </p>
+                  <div className="logro-puntos">
+                    <span className="puntos">+{logro.puntos} pts</span>
+                    <span className={`categoria-badge ${logro.categoria}`}>
+                      {logro.categoria}
+                    </span>
+                  </div>
+                </div>
+                {desbloqueado && (
+                  <div className="logro-completado">
+                    <span className="check-mark">✓</span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
+      </div>
 
       {/* Próximos logros */}
       <div className="proximos-logros">

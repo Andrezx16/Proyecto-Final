@@ -5,9 +5,13 @@ import { FaHome, FaGamepad, FaHistory, FaTrophy } from "react-icons/fa";
 import "../css/General.css";
 import Juegos from "./Juegos";
 import Historial from "./Historial";
+import { LogrosProvider, useLogros } from "../contexts/LogrosContext";
+import LogroNotification from "./LogroNotification";
 
-const General = ({ quizAnswers, onBack }) => {
+// Componente interno que usa el context
+const GeneralContent = ({ quizAnswers, onBack }) => {
   const [selected, setSelected] = useState("retos");
+  const { notificacionActual, mostrandoNotificacion, cerrarNotificacion } = useLogros();
 
   const renderContent = () => {
     switch (selected) {
@@ -56,8 +60,29 @@ const General = ({ quizAnswers, onBack }) => {
           <FaTrophy />
         </div>
       </div>
-      <div className="main-content">{renderContent()}</div>
+      
+      <div className="main-content">
+        {renderContent()}
+      </div>
+
+      {/* Notificación de logro */}
+      {notificacionActual && (
+        <LogroNotification
+          logro={notificacionActual}
+          isVisible={mostrandoNotificacion}
+          onClose={cerrarNotificacion}
+        />
+      )}
     </div>
+  );
+};
+
+// Componente principal que provee el context
+const General = ({ quizAnswers, onBack }) => {
+  return (
+    <LogrosProvider>
+      <GeneralContent quizAnswers={quizAnswers} onBack={onBack} />
+    </LogrosProvider>
   );
 };
 
