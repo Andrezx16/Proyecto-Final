@@ -180,20 +180,20 @@ const Logros = () => {
       {/* Estadísticas detalladas */}
       <div className="estadisticas-detalladas">
         <h3>📊 Estadísticas Detalladas</h3>
-        <div className="stats-grid">
-          <div className="stat-card">
+        <div className="stats-grid-logros">
+          <div className="stat-card-logros">
             <h4>Categorías Exploradas</h4>
             <span className="big-number">{stats.categorias}</span>
           </div>
-          <div className="stat-card">
+          <div className="stat-card-logros">
             <h4>Retos Fáciles</h4>
             <span className="big-number green">{stats.retosPorDificultad.facil}</span>
           </div>
-          <div className="stat-card">
+          <div className="stat-card-logros">
             <h4>Retos Medios</h4>
             <span className="big-number orange">{stats.retosPorDificultad.medio}</span>
           </div>
-          <div className="stat-card">
+          <div className="stat-card-logros">
             <h4>Retos Difíciles</h4>
             <span className="big-number red">{stats.retosPorDificultad.dificil}</span>
           </div>

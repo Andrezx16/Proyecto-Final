@@ -21,6 +21,7 @@
 .juegos-grid {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   overflow-x: auto;
   gap: 1.5rem;
   padding: 1rem;
