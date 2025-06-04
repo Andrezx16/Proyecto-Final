@@ -6,7 +6,8 @@ import "../css/user.css";
 
 const CardUser = () => {
   const usuario = useUsuario();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [expanded, setExpanded] = useState(false); // Para expandir/contraer info básica
+  const [menuOpen, setMenuOpen] = useState(false); // Para el menú de opciones
   const menuRef = useRef();
 
   useEffect(() => {
@@ -26,36 +27,53 @@ const CardUser = () => {
   const cerrarSesion = async () => {
     try {
       await onSignOut();
-      window.location.href = "/login"; // ✅ Redirección directa
+      window.location.href = "/login";
     } catch (error) {
       console.error("Error al cerrar sesión:", error);
     }
   };
 
+  // Función para expandir/contraer la info básica al hacer clic en la foto
+  const toggleExpanded = () => {
+    setExpanded(!expanded);
+    setMenuOpen(false); // Cerrar menú si está abierto
+  };
+
+  // Función para el menú de opciones (tres puntos)
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   return (
-    <div className="container" ref={menuRef}>
+    <div  title="Usuario"  className="container-user" ref={menuRef}>
       <img
         className="usuario"
         src={usuario?.avatar || user}
         alt={usuario?.email || "Usuario"}
+        onClick={toggleExpanded}
+        style={{ cursor: 'pointer' }}
       />
 
-      <div className="info">
-        {!menuOpen ? (
-          <>
-            <span className="name">{usuario?.username || "Sin Nombre"}</span>
-            <span className="email">{usuario?.email || "usuario"}</span>
-          </>
-        ) : (
-          <div className="menu-options">
-            <button onClick={cerrarSesion}>❌ Cerrar Sesión</button>
+      {expanded && (
+        <>
+          <div className="info">
+            {!menuOpen ? (
+              <>
+                <span className="name">{usuario?.username || "Sin Nombre"}</span>
+                <span className="email">{usuario?.email || "usuario"}</span>
+              </>
+            ) : (
+              <div className="menu-options">
+                <button onClick={cerrarSesion}>❌ Cerrar Sesión</button>
+              </div>
+            )}
           </div>
-        )}
-      </div>
 
-      <button className="menu-btn" onClick={() => setMenuOpen(!menuOpen)}>
-        ⋮
-      </button>
+          <button className="menu-btn" onClick={toggleMenu}>
+            ⋮
+          </button>
+        </>
+      )}
     </div>
   );
 };
