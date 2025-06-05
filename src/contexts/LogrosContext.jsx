@@ -11,9 +11,7 @@ export const useLogros = () => {
 };
 
 export const LogrosProvider = ({ children }) => {
-  const [notificacionesQueue, setNotificacionesQueue] = useState([]);
-  const [notificacionActual, setNotificacionActual] = useState(null);
-  const [mostrandoNotificacion, setMostrandoNotificacion] = useState(false);
+  const [notificationManager, setNotificationManager] = useState(null);
 
   // Funciones helper para verificaciones de tiempo
   const esMismoDia = (fecha1, fecha2) => {
@@ -164,30 +162,6 @@ export const LogrosProvider = ({ children }) => {
 
     // LOGROS DE VARIEDAD
     {
-      id: 'explorador',
-      titulo: 'Explorador',
-      descripcion: 'Completa retos de 3 categorías diferentes',
-      icono: '🗺️',
-      condicion: (retos) => {
-        const categorias = new Set(retos.map(reto => reto.categoria));
-        return categorias.size >= 3;
-      },
-      puntos: 35,
-      categoria: 'variedad'
-    },
-    {
-      id: 'aventurero',
-      titulo: 'Aventurero',
-      descripcion: 'Completa retos de 5 categorías diferentes',
-      icono: '🧭',
-      condicion: (retos) => {
-        const categorias = new Set(retos.map(reto => reto.categoria));
-        return categorias.size >= 5;
-      },
-      puntos: 50,
-      categoria: 'variedad'
-    },
-    {
       id: 'versatil',
       titulo: 'Versátil',
       descripcion: 'Completa al menos 2 retos de cada dificultad',
@@ -239,7 +213,6 @@ export const LogrosProvider = ({ children }) => {
     },
 
     // LOGROS ESPECIALES (usando horarios reales)
-
     {
       id: 'noctambulo',
       titulo: 'Búho Nocturno',
@@ -316,137 +289,62 @@ export const LogrosProvider = ({ children }) => {
       condicion: (retos) => retos.length >= 100,
       puntos: 500,
       categoria: 'maestria'
-    },
-
-    // LOGROS DE COMUNIDAD (para futuras expansiones)
-    {
-      id: 'mentor',
-      titulo: 'Mentor',
-      descripcion: 'Ayuda a otros usuarios (funcionalidad futura)',
-      icono: '🤝',
-      condicion: (retos) => false, // Deshabilitado por ahora
-      puntos: 75,
-      categoria: 'comunidad'
-    },
-    {
-      id: 'colaborador',
-      titulo: 'Colaborador',
-      descripcion: 'Participa en retos grupales (funcionalidad futura)',
-      icono: '👥',
-      condicion: (retos) => false, // Deshabilitado por ahora
-      puntos: 60,
-      categoria: 'comunidad'
-    },
-
-    // LOGROS SECRETOS
-    {
-      id: 'secreto_uno',
-      titulo: '???',
-      descripcion: 'Logro secreto - ¡Descúbrelo!',
-      icono: '🔮',
-      condicion: (retos) => {
-        // Condición secreta: completar exactamente 13 retos
-        return retos.length === 13;
-      },
-      puntos: 100,
-      categoria: 'secreto',
-      secreto: true
-    },
-    {
-      id: 'secreto_dos',
-      titulo: '???',
-      descripcion: 'Logro secreto - ¡Descúbrelo!',
-      icono: '🎪',
-      condicion: (retos) => {
-        // Condición secreta: completar retos de todas las categorías disponibles
-        const categorias = new Set(retos.map(reto => reto.categoria));
-        return categorias.size >= 7; // Ajustar según categorías disponibles
-      },
-      puntos: 150,
-      categoria: 'secreto',
-      secreto: true
-    },
-    {
-      id: 'secreto_tres',
-      titulo: '???',
-      descripcion: 'Logro secreto - ¡Descúbrelo!',
-      icono: '🌙',
-      condicion: (retos) => {
-        // Condición secreta: completar un reto exactamente a medianoche
-        return retos.some(reto => {
-          const fecha = new Date(reto.completedOn);
-          return fecha.getHours() === 0 && fecha.getMinutes() === 0;
-        });
-      },
-      puntos: 75,
-      categoria: 'secreto',
-      secreto: true
     }
   ];
 
-  // Verificar nuevos logros desbloqueados
+  // Función para registrar el notification manager
+  const registerNotificationManager = useCallback((manager) => {
+    setNotificationManager(manager);
+  }, []);
+
+  // Función helper para transformar logro secreto cuando se desbloquea
+  const transformarLogroParaNotificacion = useCallback((logro) => {
+    if (logro.secreto) {
+      return {
+        ...logro,
+        titulo: logro.tituloDesbloqueado || logro.titulo,
+        descripcion: logro.descripcionDesbloqueada || logro.descripcion,
+        esLogroSecreto: true
+      };
+    }
+    return logro;
+  }, []);
+
+  // Verificar nuevos logros desbloqueados y mostrarlos inmediatamente
   const verificarNuevosLogros = useCallback((retosCompletados, logrosAnteriores = new Set()) => {
     const nuevosLogros = [];
     
     logrosDisponibles.forEach(logro => {
       if (logro.condicion(retosCompletados) && !logrosAnteriores.has(logro.id)) {
-        nuevosLogros.push(logro);
+        const logroParaNotificacion = transformarLogroParaNotificacion(logro);
+        nuevosLogros.push(logroParaNotificacion);
       }
     });
 
-    if (nuevosLogros.length > 0) {
-      // Agregar nuevos logros a la cola de notificaciones
-      setNotificacionesQueue(prev => [...prev, ...nuevosLogros]);
+    // Mostrar todas las notificaciones inmediatamente
+    if (nuevosLogros.length > 0 && notificationManager) {
+      nuevosLogros.forEach(logro => {
+        notificationManager.addNotification(logro);
+      });
     }
 
     return nuevosLogros;
-  }, [logrosDisponibles]);
-
-  // Mostrar siguiente notificación
-  const mostrarSiguienteNotificacion = useCallback(() => {
-    if (notificacionesQueue.length > 0 && !mostrandoNotificacion) {
-      const siguienteLogro = notificacionesQueue[0];
-      setNotificacionActual(siguienteLogro);
-      setMostrandoNotificacion(true);
-      setNotificacionesQueue(prev => prev.slice(1));
-    }
-  }, [notificacionesQueue, mostrandoNotificacion]);
-
-  // Cerrar notificación actual
-  const cerrarNotificacion = useCallback(() => {
-    setMostrandoNotificacion(false);
-    setTimeout(() => {
-      setNotificacionActual(null);
-      // Mostrar siguiente notificación si hay más en la cola
-      if (notificacionesQueue.length > 0) {
-        setTimeout(() => {
-          mostrarSiguienteNotificacion();
-        }, 500);
-      }
-    }, 300);
-  }, [notificacionesQueue, mostrarSiguienteNotificacion]);
-
-  // Efecto para mostrar notificaciones automáticamente
-  React.useEffect(() => {
-    mostrarSiguienteNotificacion();
-  }, [mostrarSiguienteNotificacion]);
+  }, [logrosDisponibles, transformarLogroParaNotificacion, notificationManager]);
 
   // Función helper para obtener logros por categoría
   const getLogrosPorCategoria = useCallback((categoria) => {
     return logrosDisponibles.filter(logro => logro.categoria === categoria);
-  }, [logrosDisponibles]);
+  }, []);
 
   // Función helper para obtener logros secretos
   const getLogrosSecretos = useCallback(() => {
     return logrosDisponibles.filter(logro => logro.secreto);
-  }, [logrosDisponibles]);
+  }, []);
 
   const contextValue = {
     logrosDisponibles,
-    notificacionActual,
-    mostrandoNotificacion,
     verificarNuevosLogros,
-    cerrarNotificacion,
+    registerNotificationManager,
     getLogrosPorCategoria,
     getLogrosSecretos,
     // Función helper para calcular logros desbloqueados
@@ -482,7 +380,22 @@ export const LogrosProvider = ({ children }) => {
         logrosPorCategoria
       };
     },
-    // Funciones helper adicionales para análisis de tiempo
+    // Función helper para obtener el título y descripción correctos de un logro
+    getLogroInfo: (logroId, estaDesbloqueado) => {
+      const logro = logrosDisponibles.find(l => l.id === logroId);
+      if (!logro) return null;
+      
+      // Si es un logro secreto y está desbloqueado, mostrar la info real
+      if (logro.secreto && estaDesbloqueado) {
+        return {
+          ...logro,
+          titulo: logro.tituloDesbloqueado || logro.titulo,
+          descripcion: logro.descripcionDesbloqueada || logro.descripcion
+        };
+      }
+      
+      return logro;
+    },
     getRetosHoy: (retosCompletados) => {
       return contarRetosEnDia(retosCompletados, new Date());
     },

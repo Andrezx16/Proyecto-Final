@@ -6,12 +6,21 @@ import "../css/General.css";
 import Juegos from "./Juegos";
 import Historial from "./Historial";
 import { LogrosProvider, useLogros } from "../contexts/LogrosContext";
-import LogroNotification from "./LogroNotification";
+import NotificationManager from "./NotificationManager";
+import useNotifications from "../hooks/useNotifications";
 
 // Componente interno que usa el context
 const GeneralContent = ({ quizAnswers, onBack }) => {
   const [selected, setSelected] = useState("retos");
-  const { notificacionActual, mostrandoNotificacion, cerrarNotificacion } = useLogros();
+  const { notificationManagerRef } = useNotifications();
+  const { registerNotificationManager } = useLogros();
+
+  // Registrar el notification manager en el contexto
+  React.useEffect(() => {
+    if (notificationManagerRef.current) {
+      registerNotificationManager(notificationManagerRef.current);
+    }
+  }, [registerNotificationManager, notificationManagerRef]);
 
   const renderContent = () => {
     switch (selected) {
@@ -65,14 +74,8 @@ const GeneralContent = ({ quizAnswers, onBack }) => {
         {renderContent()}
       </div>
 
-      {/* Notificación de logro */}
-      {notificacionActual && (
-        <LogroNotification
-          logro={notificacionActual}
-          isVisible={mostrandoNotificacion}
-          onClose={cerrarNotificacion}
-        />
-      )}
+      {/* Sistema de múltiples notificaciones */}
+      <NotificationManager ref={notificationManagerRef} />
     </div>
   );
 };

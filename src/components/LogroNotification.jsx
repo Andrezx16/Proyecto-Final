@@ -7,18 +7,11 @@ const LogroNotification = ({ logro, onClose, isVisible }) => {
   useEffect(() => {
     if (isVisible) {
       setShouldRender(true);
-      // Auto cerrar después de 5 segundos
-      const timer = setTimeout(() => {
-        onClose();
-      }, 5000);
-      
-      return () => clearTimeout(timer);
     }
-  }, [isVisible, onClose]);
+  }, [isVisible]);
 
   useEffect(() => {
     if (!isVisible && shouldRender) {
-      // Delay para permitir animación de salida
       const timer = setTimeout(() => {
         setShouldRender(false);
       }, 300);
