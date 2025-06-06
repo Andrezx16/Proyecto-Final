@@ -81,7 +81,8 @@ html, body, #root {
     border-right: none;
     border-top: 2px solid #a0cfff;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-    width: 100%;
+    width: 450px;
+    height: 80px; /* Altura fija para la barra lateral en móviles */
     padding: 0.8rem; /* Aumentado el padding */
     min-height: 80px; /* Altura mínima para evitar superposición */
     position: relative; /* Posicionamiento relativo */

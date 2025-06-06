@@ -1,9 +1,17 @@
-/* Contenedor principal de la notificación */
-.logro-notification {
+/* Contenedor para todas las notificaciones */
+.notification-container {
   position: fixed;
   top: 20px;
   right: 20px;
   z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Contenedor principal de la notificación */
+.logro-notification {
+  position: relative;
   width: 400px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 20px;
